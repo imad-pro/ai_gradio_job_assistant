@@ -1,4 +1,3 @@
-import asyncio
 from g4f.client import Client
 import gradio as gr
 from langdetect import detect
@@ -64,20 +63,16 @@ def chatbot_response(job_description, cv):
     # Return the response
     return response.choices[0].message.content
 
-# Set the event loop policy for Windows compatibility
-if __name__ == "__main__":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+# Define the interface with two text boxes for job description and CV
+interface = gr.Interface(
+    fn=chatbot_response,
+    inputs=[
+        gr.Textbox(label="Job Description", placeholder="Enter the job description here..."),
+        gr.Textbox(label="CV", placeholder="Enter your CV here...")
+    ],
+    outputs=gr.Textbox(),
+    title="AI Assistant Interview Prep",
+    description="Enter the job description and your CV, and the AI assistant will help you prepare for your interview."
+)
 
-    # Define the interface with two text boxes for job description and CV
-    interface = gr.Interface(
-        fn=chatbot_response,
-        inputs=[
-            gr.Textbox(label="Job Description", placeholder="Enter the job description here..."),
-            gr.Textbox(label="CV", placeholder="Enter your CV here...")
-        ],
-        outputs=gr.Textbox(),
-        title="AI Assistant Interview Prep",
-        description="Enter the job description and your CV, and the AI assistant will help you prepare for your interview."
-    )
-
-    interface.launch(share=True)
+interface.launch()
